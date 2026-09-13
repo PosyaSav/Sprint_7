@@ -41,3 +41,27 @@ def metro_station():
 
 def scooter_colour(choise):
     return Data.COLOURS[choise]
+
+def payload_create_courier():
+    """Метод для генерации данных курьера"""
+    payload = {
+        'login': username(),
+        'password': password(),
+        'firstName': first_name()
+    }
+    return payload
+
+def order_data():
+    """Фикстура для генерации данных заказа"""
+    payload_create_order = {
+    "firstName": first_name(),
+    "lastName": last_name(),
+    "address": address(),    
+    "metroStation": metro_station(),   
+    "phone":phone_number(),
+    "rentTime": rent_time(),
+    "deliveryDate": date(),  
+    "comment": "",
+    "colour": "" 
+    }
+    return payload_create_order
