@@ -16,7 +16,15 @@ class TestCreateCourier:
 
         assert 201 == response_create_courier.status_code
         assert ResponseMessages.SUCCESS == response_create_courier.json()
+    """
+    Можно лучше: супер что очищается БД, но делать это стоит в фикстуре, 
+    чтобы даже если в тесте что-то пошло не по плану, 
+    Бд всё же осталась в изначальном состоянии
 
+    А как это сделать? Прошлое замечание было что в фикстуре создавался курьер и это заменяет шаги теста. 
+    Теперь в тесте создается курьер и после удаляется. Как это пробросить в фикстуру нет понимания. 
+    В темах урока этому не учат, на вебинарах подробно не объясняется.
+    """
     @allure.title('Тест создания одинаковых курьеров')
     def test_create_same_couriers_failed(self, create_courier):
         payload_create_courier = create_courier['payload']

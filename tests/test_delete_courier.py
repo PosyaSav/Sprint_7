@@ -21,6 +21,15 @@ class TestDeleteCourier:
         assert 404 == response_delete_bad_id.status_code
         assert ResponseMessages.BAD_ID == message['message']
 
+    """
+    Здесь удаление это не предусловие.
+
+    мы просто можем удалять случайного курьера, зачем его было создавать и удалять в предусловии?
+
+    Нет понимания откуда брать трек номер курьера для удаления. 
+    При генерации может появиться существующий курьер и тест провалится. 
+    Создать и удалить курьера гарантированно дает нам трек номер несуществующего курьера, тест всегда будет выполняться.
+    """
     @allure.title('Тест удаления существующего курьера с запросом без id')
     def test_delete_courier_empty_id(self):
         response_delete_empty_id = requests.delete(f"{Url.DELETE_COURIER}")

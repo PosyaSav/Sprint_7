@@ -34,11 +34,24 @@ def delete_courier(create_courier):
     response_create_courier = create_courier
     payload_delete_courier = response_create_courier['delete']
     response_delete_courier = requests.delete(f"{Url.DELETE_COURIER}{payload_delete_courier['id']}", data = payload_delete_courier)
-    yield {
+    return {
         'courier_data': response_create_courier['payload'], 
         'response': response_delete_courier.json(),
         'payload': payload_delete_courier
         }
+
+"""
+Запрос на удаление курьера должен происходить после yield а не до.
+
+нужно исправить: удалять курьеров нужно в фикстуре с постусловием, 
+в предысловии такой фикстуры делаем пустой список куда запишем айди для удаления, 
+или генерируем креды, по которым потом удалим
+
+
+yield заменне на return. 
+А в остальном фикстура используется чтобы удалить курьера и тем самым обеспечить трек номер несуществующего курьера.
+В темах урока не объясняется что так делать нельзя
+"""
 
 @pytest.fixture
 def create_order():
@@ -59,9 +72,21 @@ def create_order():
         }   
     requests.put(f"{Url.CANCEL_ORDER}?track={payload_cancel_order['track']}", data=payload_cancel_order)
 
+"""
+Нужно исправить: если не возвращаемся в фикстуру после теста, то нужен return а не yield
+
+Возврат в фикстуру происходит чтобы удалить курьера
+"""
+
 @pytest.fixture
 def cancel_order(create_order):
     """Фикстура для отмены заказа"""
     payload_cancel_order = create_order
     requests.put(f"{Url.CANCEL_ORDER}?track={payload_cancel_order['track']}", data=payload_cancel_order['response'])
     return payload_cancel_order['track']
+
+"""
+заказ удаляем в постусловии, после yield а не до
+
+Фикстура используется чтобы получить номер несуществующего заказа.
+"""
